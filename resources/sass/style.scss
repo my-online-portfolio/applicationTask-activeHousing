@@ -29,12 +29,20 @@ html, body{
     background-color: map-get($colourPalette, 'secondary');
 }
 
+body{
+    margin: 0;
+}
+
 html,body,button,input[type=button]{
     
     color: map-get($colourPalette, 'grey');
     font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
     font-size: unquote(map-get(map-get($fontSize,'regular'),'size'));
 }
+
+.header, header{ background-color: white;}
+.main, main{ background-color: map-get($colourPalette, 'secondary');}
+
 
 a{
     &:link,&:visited,&:hover,&:active{
