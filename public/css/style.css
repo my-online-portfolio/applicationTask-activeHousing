@@ -10,11 +10,20 @@
 }
 html, body {
   font-family: SourceSansPro;
+  background-color: #eeeeee;
 }
 
 html, body, button, input[type=button] {
+  color: #555555;
   font-weight: normal;
   font-size: 14pt;
+}
+
+a:link, a:visited, a:hover, a:active {
+  color: #2979bc;
+  font-weight: normal;
+  font-size: 18pt;
+  text-decoration: underline;
 }
 
 .h-10vh {
