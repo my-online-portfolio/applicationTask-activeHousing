@@ -13,14 +13,22 @@ html, body {
   background-color: #eeeeee;
 }
 
+body {
+  margin: 0;
+}
+
 html, body, button, input[type=button] {
   color: #555555;
   font-weight: normal;
   font-size: 14pt;
 }
 
-header {
+.header, header {
   background-color: white;
+}
+
+.main, main {
+  background-color: #eeeeee;
 }
 
 a:link, a:visited, a:hover, a:active {
