@@ -1,3 +1,30 @@
-body{
-    background-color: black;
+@import '_mixins';
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
+[class*=row]{
+    &:nth-child(odd){
+        background-color: brown;
+    }
+    &:nth-child(even){
+        background-color: rgb(177, 108, 108);
+    }
+}
+
+[class*=col]{
+    &:nth-child(odd){
+        background-color:green;
+    }
+    &:nth-child(even){
+        background-color: rgb(111, 199, 111);
+    }
+}
+
+.h{
+    @include height_and_wide('vh','vh','height');
+}
+.w{
+    @include height_and_wide('vw','vw','width');
 }
