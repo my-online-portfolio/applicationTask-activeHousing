@@ -19,6 +19,10 @@ html, body, button, input[type=button] {
   font-size: 14pt;
 }
 
+header {
+  background-color: white;
+}
+
 a:link, a:visited, a:hover, a:active {
   color: #2979bc;
   font-weight: normal;
