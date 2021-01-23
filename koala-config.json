@@ -7,9 +7,10 @@
 	],
 	"ignores": ["node_modules/","*.json", "*.txt", "*.coffee"],
 	"options": {
-		"output_style": "expanded",
-		"line_comments": true,
-		"debug_info": false
+		"output_style": "compressed",
+		"line_comments": false,
+		"debug_info": false,
+		"autoprefix": true
 	},
 	"includePaths": []
 }
