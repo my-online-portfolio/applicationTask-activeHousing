@@ -1,15 +1,15 @@
 $colourPalette:('primary':#2979bc,'secondary':#eeeeee,'grey':#555555);
-$fontSize:('regular':('size':'14pt','weight':'regular'),'large':('size':'18pt','weight':'regular'),'xlarge':('size':'22pt','weight':'bold'));
-$fontName: 'Source Sans Pro';
+$fontSize:('regular':('size':'14pt','weight':'normal'),'large':('size':'18pt','weight':'normal'),'xlarge':('size':'22pt','weight':'bold'));
+$fontName: 'SourceSansPro';
 
 
 @font-face {
-    font-family: SourceSansPro;
+    font-family: #{$fontName};
     src: url('/fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
     font-weight: normal;
 }
 @font-face {
-    font-family: SourceSansPro;
+    font-family:  #{$fontName};
     src: url('/fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf');
     font-weight: bold;
 }
@@ -25,24 +25,21 @@ $fontName: 'Source Sans Pro';
 ////////////////////////////////////////////////////
 
 html, body{
+    font-family: #{$fontName};
 }
 
-[class*=row]{
-    &:nth-child(odd){
-        background-color: brown;
-    }
-    &:nth-child(even){
-        background-color: rgb(177, 108, 108);
-    }
+html,body,button,input[type=button]{
+    
+    font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
+    font-size: unquote(map-get(map-get($fontSize,'regular'),'size'));
 }
 
-[class*=col]{
-    &:nth-child(odd){
-        background-color:green;
-    }
-    &:nth-child(even){
-        background-color: rgb(111, 199, 111);
-    }
+a{
+    &:link,&:visited,&:hover,&:active{}
+    &:link{}
+    &:visited{}
+    &:hover{}
+    &:active{}
 }
 
 .h{
