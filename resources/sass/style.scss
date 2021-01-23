@@ -26,16 +26,23 @@ $fontName: 'SourceSansPro';
 
 html, body{
     font-family: #{$fontName};
+    background-color: map-get($colourPalette, 'secondary');
 }
 
 html,body,button,input[type=button]{
     
+    color: map-get($colourPalette, 'grey');
     font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
     font-size: unquote(map-get(map-get($fontSize,'regular'),'size'));
 }
 
 a{
-    &:link,&:visited,&:hover,&:active{}
+    &:link,&:visited,&:hover,&:active{
+        color: map-get($colourPalette, 'primary');
+        font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
+        font-size: unquote(map-get(map-get($fontSize,'large'),'size'));
+        text-decoration: underline;
+    }
     &:link{}
     &:visited{}
     &:hover{}
