@@ -1,0 +1,19 @@
+@mixin height_and_wide($prefix:'',$unit:'px',$type:'height',$startSize:10,$incSize:10,$maxSize:100){
+
+    $size: $startSize;
+    @while $size<=$maxSize{
+
+        &-#{$size}#{$prefix}{
+            #{$type}: #{$size}#{$unit};
+        }
+        &-#{$size}#{$prefix}-min{
+            min-#{$type}: #{$size}#{$unit};
+        }
+        &-#{$size}#{$prefix}-max{
+            max-#{$type}: #{$size}#{$unit};
+        }
+
+        $size: $size+$incSize;
+    }
+
+}
