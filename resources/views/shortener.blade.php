@@ -11,10 +11,10 @@
     </head>
     <body>
         <div class="container-fluid">
-            <div class="row">
+            <div class="row h-80vh-min">
                 <div class="col">Row 1 Col 1</div>
             </div>
-            <div class="row">
+            <div class="row h-20vh-min">
                 <div class="col">Row 2 Col 1</div>
             </div>
         </div>
