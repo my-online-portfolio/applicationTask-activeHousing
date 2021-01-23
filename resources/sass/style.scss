@@ -1,8 +1,31 @@
+$colourPalette:('primary':#2979bc,'secondary':#eeeeee,'grey':#555555);
+$fontSize:('regular':('size':'14pt','weight':'regular'),'large':('size':'18pt','weight':'regular'),'xlarge':('size':'22pt','weight':'bold'));
+$fontName: 'Source Sans Pro';
+
+
+@font-face {
+    font-family: SourceSansPro;
+    src: url('/fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
+    font-weight: normal;
+}
+@font-face {
+    font-family: SourceSansPro;
+    src: url('/fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf');
+    font-weight: bold;
+}
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
 @import '_mixins';
 
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////
+
+html, body{
+}
 
 [class*=row]{
     &:nth-child(odd){
