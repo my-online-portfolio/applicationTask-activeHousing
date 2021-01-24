@@ -10,17 +10,14 @@
 }
 html, body {
   font-family: SourceSansPro;
+  font-weight: normal;
+  font-size: 14pt;
   background-color: #eeeeee;
+  color: #555555;
 }
 
 body {
   margin: 0;
-}
-
-html, body, button, input[type=button] {
-  color: #555555;
-  font-weight: normal;
-  font-size: 14pt;
 }
 
 .header, header {
