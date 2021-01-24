@@ -1,6 +1,8 @@
 $colourPalette:('primary':#2979bc,'secondary':#eeeeee,'grey':#555555);
 $fontSize:('regular':('size':'14pt','weight':'normal'),'large':('size':'18pt','weight':'normal'),'xlarge':('size':'22pt','weight':'bold'));
 $fontName: 'SourceSansPro';
+$lineHeight: calc(#{unquote(map-get(map-get($fontSize,'regular'),'size'))} + 10px);
+
 
 
 @font-face {
@@ -25,29 +27,60 @@ $fontName: 'SourceSansPro';
 ////////////////////////////////////////////////////
 
 html, body{
-    font-family: #{$fontName};
+    @include fontFamilyStandard();
     background-color: map-get($colourPalette, 'secondary');
+    color: map-get($colourPalette, 'grey');
 }
 
 body{
     margin: 0;
 }
 
-html,body,button,input[type=button]{
-    
-    color: map-get($colourPalette, 'grey');
-    font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
-    font-size: unquote(map-get(map-get($fontSize,'regular'),'size'));
+header,main,footer,section,.header,.main,.footer,.section{
+    margin:auto;
 }
-
 .header, header{ background-color: white;}
 .main, main{ background-color: map-get($colourPalette, 'secondary');}
+.section, section{
+    margin-top:40px;
+    margin-left:40px;
+}
 
 .logo{
-    margin: auto;
-    margin-top:45px;
-    margin-left:45px;
     width: 350px;
+}
+
+table, .table{
+    align: center;
+    width: 100%;
+
+    thead, .thead{}
+    tbody, .tbody{}
+    
+    th,tr,td,.th,.tr,.td{}
+
+    th{}
+    tr{}
+    td{}
+}
+
+input{
+    padding: 0;
+    &,&[type=button],&[type=submit],&[type=text],&[type=url],&[type=checkbox]{
+        margin: 0;
+        left: auto;
+        @include fontFamilyStandard();
+    }
+    &[type=button],&[type=submit],&[type=text],&[type=url]{
+        width: 90%;
+    }
+}
+
+button,.button{
+    
+    @include fontFamilyStandard();
+    background-color: #2979BC;
+    color: white;
 }
 
 a{
@@ -63,10 +96,14 @@ a{
     &:active{}
 }
 
+.hide{
+    display: none !important;
+}
+
 //generate margins
-@include spacing('','px','margin',10,10,100);
+@include spacing('','px','margin',5,5,100);
 //generate padding
-@include spacing('','px','padding',10,10,100);
+@include spacing('','px','padding',5,5,100);
 
 .h{
     @include height_and_wide('vh','vh','height');

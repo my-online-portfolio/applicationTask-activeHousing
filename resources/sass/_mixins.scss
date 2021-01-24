@@ -1,3 +1,8 @@
+@mixin fontFamilyStandard(){
+    font-family: #{$fontName};
+    font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
+    font-size: unquote(map-get(map-get($fontSize,'regular'),'size'));
+}
 @mixin height_and_wide($prefix:'',$unit:'px',$type:'height',$startSize:10,$incSize:10,$maxSize:100){
 
     $size: $startSize;
@@ -17,16 +22,17 @@
     }
 
 }
-
 @mixin spacing($prefix:'px',$unit:'px',$type:'margin',$startSize:10,$incSize:10,$maxSize:100){
     $identifier: 'm';
+    $size: 0;
+
     @if $type=='padding'{
         $identifier: 'p';
     }
-    $size: $startSize;
-
-    .#{$identifier}x-a{
-        #{$type}: auto;
+    @if $type=='margin'{
+        .#{$identifier}x-a{
+            #{$type}: auto;
+        }
     }
 
     @while $size<=$maxSize{
