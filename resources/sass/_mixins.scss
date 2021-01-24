@@ -3,7 +3,7 @@
     font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
     font-size: unquote(map-get(map-get($fontSize,'regular'),'size'));
 }
-@mixin height_and_wide($prefix:'',$unit:'px',$type:'height',$startSize:10,$incSize:10,$maxSize:100){
+@mixin height_and_wide($prefix:'px',$unit:'px',$type:'height',$startSize:10,$incSize:10,$maxSize:100){
 
     $size: $startSize;
     @while $size<=$maxSize{
