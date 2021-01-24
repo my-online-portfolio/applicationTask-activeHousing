@@ -1,0 +1,61 @@
+@mixin fontFamilyStandard(){
+    font-family: #{$fontName};
+    font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
+    font-size: unquote(map-get(map-get($fontSize,'regular'),'size'));
+}
+@mixin height_and_wide($prefix:'px',$unit:'px',$type:'height',$startSize:10,$incSize:10,$maxSize:100){
+
+    $size: $startSize;
+    @while $size<=$maxSize{
+
+        &-#{$size}#{$prefix}{
+            #{$type}: #{$size}#{$unit};
+        }
+        &-#{$size}#{$prefix}-min{
+            min-#{$type}: #{$size}#{$unit};
+        }
+        &-#{$size}#{$prefix}-max{
+            max-#{$type}: #{$size}#{$unit};
+        }
+
+        $size: $size+$incSize;
+    }
+
+}
+@mixin spacing($prefix:'px',$unit:'px',$type:'margin',$startSize:10,$incSize:10,$maxSize:100){
+    $identifier: 'm';
+    $size: 0;
+
+    @if $type=='padding'{
+        $identifier: 'p';
+    }
+    @if $type=='margin'{
+        .#{$identifier}x-a{
+            #{$type}: auto;
+        }
+    }
+
+    @while $size<=$maxSize{
+
+        .#{$identifier}x-#{$size}#{$prefix}{
+            #{$type}-top: #{$size}#{$unit};
+            #{$type}-right: #{$size}#{$unit};
+            #{$type}-bottom: #{$size}#{$unit};
+            #{$type}-left: #{$size}#{$unit};
+        }
+        .#{$identifier}t-#{$size}#{$prefix}{
+            #{$type}-top: #{$size}#{$unit};
+        }
+        .#{$identifier}r-#{$size}#{$prefix}{
+            #{$type}-right: #{$size}#{$unit};
+        }
+        .#{$identifier}b-#{$size}#{$prefix}{
+            #{$type}-bottom: #{$size}#{$unit};
+        }
+        .#{$identifier}l-#{$size}#{$prefix}{
+            #{$type}-left: #{$size}#{$unit};
+        }
+
+        $size: $size+$incSize;
+    }
+}

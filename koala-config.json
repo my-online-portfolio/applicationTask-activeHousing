@@ -1,0 +1,16 @@
+{
+	"mappings": [
+		{
+			"src": "resources/sass",
+			"dest": "public/css"
+		}
+	],
+	"ignores": ["node_modules/","*.json", "*.txt", "*.coffee"],
+	"options": {
+		"output_style": "expanded",//compressed
+		"line_comments": false,
+		"debug_info": false,
+		"autoprefix": true
+	},
+	"includePaths": []
+}
