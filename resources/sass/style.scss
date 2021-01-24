@@ -46,6 +46,13 @@ header,main,footer,section,.header,.main,.footer,.section{
     margin-left:40px;
 }
 
+h,.h{
+    &1{
+        font-weight: unquote(map-get(map-get($fontSize,'xlarge'),'weight'));
+        font-size: unquote(map-get(map-get($fontSize,'xlarge'),'size'));
+    }
+}
+
 .logo{
     width: 350px;
 }
@@ -86,7 +93,7 @@ button,.button{
 a{
     &:link,&:visited,&:hover,&:active{
         color: map-get($colourPalette, 'primary');
-        font-weight: unquote(map-get(map-get($fontSize,'regular'),'weight'));
+        font-weight: unquote(map-get(map-get($fontSize,'large'),'weight'));
         font-size: unquote(map-get(map-get($fontSize,'large'),'size'));
         text-decoration: underline;
     }
@@ -100,13 +107,29 @@ a{
     display: none !important;
 }
 
+.container{
+    .row{
+        background-color: white;
+        border-color: map-get($colourPalette,'grey');
+        border-width: 1px;
+        border-style: solid;
+
+        &:not(:last-child){
+            border-bottom-style: none;
+        }
+
+    }
+}
+
 //generate margins
 @include spacing('','px','margin',5,5,100);
 //generate padding
 @include spacing('','px','padding',5,5,100);
+@include spacing('pc','pc','padding',2,2,100);
 
 .h{
     @include height_and_wide('vh','vh','height');
+    @include height_and_wide('pc','%','height');
 }
 .w{
     @include height_and_wide('vw','vw','width');
