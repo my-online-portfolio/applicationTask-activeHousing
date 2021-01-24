@@ -64,9 +64,9 @@ a{
 }
 
 //generate margins
-@include spacing('px','px','margin',10,10,100);
+@include spacing('','px','margin',10,10,100);
 //generate padding
-@include spacing('px','px','padding',10,10,100);
+@include spacing('','px','padding',10,10,100);
 
 .h{
     @include height_and_wide('vh','vh','height');
