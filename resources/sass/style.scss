@@ -43,6 +43,12 @@ html,body,button,input[type=button]{
 .header, header{ background-color: white;}
 .main, main{ background-color: map-get($colourPalette, 'secondary');}
 
+.logo{
+    margin: auto;
+    margin-top:45px;
+    margin-left:45px;
+    width: 350px;
+}
 
 a{
     &:link,&:visited,&:hover,&:active{
@@ -56,6 +62,11 @@ a{
     &:hover{}
     &:active{}
 }
+
+//generate margins
+@include spacing('px','px','margin',10,10,100);
+//generate padding
+@include spacing('px','px','padding',10,10,100);
 
 .h{
     @include height_and_wide('vh','vh','height');
