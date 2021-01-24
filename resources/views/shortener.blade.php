@@ -12,11 +12,11 @@
     <body>
         <!-- HEADER -->
         <header class="h-30vh-min">
-            Some kind of content in here
+            <img class="logo mt-40 ml-40" src="{{ asset('img/hn-bit-logo.png') }}">
         </header>
         <!-- MAIN -->
         <main class="h-70vh-min">
-            Some kind of content in here
+            <div class="mt-40 ml-40"></div>
         </main>
         <script src="{{ asset('js/jquery-3.4.1.slim.min.js') }}"></script>
         <script src="{{ asset('js/popper.min.js') }}"></script>
