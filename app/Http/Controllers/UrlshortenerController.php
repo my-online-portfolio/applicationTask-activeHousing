@@ -72,11 +72,14 @@ class UrlshortenerController extends Controller
                 if(!empty($newEndpoint)){
                     $newEndpoint .= "-";
                 }
-                $newEndpoint .= $this->effWords[rand(0,($totalEffWords-1))];
+                $newEndpoint .= $this->effWords[$this->effWordLastUsedKey];
             }
 
         //increase the generation count
         $this->endpointRegenerateCount++;
+
+        //increment the last used key
+        $this->effWordLastUsedKey++;
 
         return $newEndpoint;
     }
