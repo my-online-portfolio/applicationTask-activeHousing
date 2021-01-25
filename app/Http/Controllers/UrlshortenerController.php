@@ -95,6 +95,7 @@ class UrlshortenerController extends Controller
            $compareEndpointResult = $this->compareEndPoints($newEndpoint);
            $endpointWordCount = $compareEndpointResult->wordCount;
 
+           
 
 
            //if comparison returns true, then stop the generator
