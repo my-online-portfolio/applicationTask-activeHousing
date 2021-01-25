@@ -133,8 +133,11 @@ class UrlshortenerController extends Controller
         }
 
         //now that we have our endpoint we need to save it
-        
-
+        $newInsert = [
+            'user_url' => $userSubmittedURL,
+            'generated_url' => $newEndpoint
+        ];
+        DB::table('urlshorteners')->insert($newInsert);
 
         //now return the new url to the user. Save as array first
         $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>url('').'/'.$newEndpoint];
