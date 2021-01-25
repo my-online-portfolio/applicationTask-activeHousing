@@ -131,7 +131,13 @@ class UrlshortenerController extends Controller
                 break;
            }
         }
-        $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>$newEndpoint];
+
+        //now that we have our endpoint we need to save it
+        
+
+
+        //now return the new url to the user. Save as array first
+        $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>url('').'/'.$newEndpoint];
 
         //render the main page with fields
         return view('shortener', ['recentList'=>$this->getRecent10(), 'URL'=>$URL]);
