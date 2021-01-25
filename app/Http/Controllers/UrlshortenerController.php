@@ -16,7 +16,22 @@ class UrlshortenerController extends Controller
         return $recentList;
     }
 
+    private function getUsedGeneratedEndpoints(){
+        return DB::table('urlshorteners')->select('generated_url')->get();
+    }
+
+    private function getEffWords(){
+        return DB::table('effwords')->select('words')->get();
+    }
+
     private function generateShortUrl(){
+
+        $usedGeneratedEndpoints = $this->getUsedGeneratedEndpoints();
+        $getEffWords = $this->getEffWords();
+
+
+        print_r($getEffWordsx);
+        die;
 
         return "http://sillysentence/".rand(0,9999);
     }
