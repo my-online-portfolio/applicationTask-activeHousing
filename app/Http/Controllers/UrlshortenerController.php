@@ -113,10 +113,6 @@ class UrlshortenerController extends Controller
     
     public function create()
     {
-
-        
-        header('Content-Type: text/plain');
-
         //capture user submitted url
         $userSubmittedURL = request('urlInput');
         //get generated endpoints
