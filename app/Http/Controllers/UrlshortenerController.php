@@ -10,6 +10,7 @@ class UrlshortenerController extends Controller
 
     private $effWords = [];
     private $usedWords = [];
+    private $useableWords = [];
 
     //convert a stdClass object to array
     private function extractFromStdClass($object, $key){
@@ -28,7 +29,7 @@ class UrlshortenerController extends Controller
     //get the generated endpoints from the database
     private function getUsedGeneratedEndpoints(){
         $usedWords = DB::table('urlshorteners')->select('generated_url')->get();//database call
-        return $this->usedWords = $this->extractFromStdClass($usedWords, 'words');//convert to array and return 
+        return $this->usedWords = $this->extractFromStdClass($usedWords, 'generated_url');//convert to array and return 
     }
 
     //get the effwords list from the database
@@ -37,24 +38,28 @@ class UrlshortenerController extends Controller
         return $this->effWords = $this->extractFromStdClass($effWords, 'words');//convert to array and return 
     }
 
-    private function compareEndPoints($new = null, $used = []){
-        //loop through the used words list and look for a match
+    private function compareEndPoints($newWord){
+        //renew used word list - keep it fresh as it may have changed
+        $this->getUsedGeneratedEndpoints();
 
-        foreach($used as $key=>$value){
-            print_r($value->generated_url);
-            echo "\r\n";
-        }
+        print_r($newWord);
+        
         exit;
     }
 
-    private function generateShortUrl($newWord = null){
+    private function generateShortUrl($wordCount = 1){
         //get total amount of words to choose from
         $totalEffWords = count($this->effWords);
+        $newEndpoint = null;
 
-        
+            for($i=1;$i<=$wordCount;$i++){
+                if(!empty($newEndpoint)){
+                    $newEndpoint .= "-";
+                }
+                $newEndpoint .= $this->effWords[rand(0,($totalEffWords-1))];
+            }
 
-        die;
-
+        return $newEndpoint;
     }
     
     public function index()
@@ -83,9 +88,10 @@ class UrlshortenerController extends Controller
 
 
         //generate new url endpoint
+        $this->generateShortUrl();
 
 
-
+        die;
         $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>$this->generateShortUrl($userSubmittedURL)];
 
         //render the main page with fields
