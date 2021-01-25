@@ -48,27 +48,36 @@ class UrlshortenerController extends Controller
         //refresh the used entry list
         $this->getUsedGeneratedEndpoints();
 
-        //check the the regeneration count isn't more or equal to the usedlist count
-        if(count($this->usedWords)>=$this->endpointRegenerateCount){
-            //update wordcount to regenerate with increased words
+        if(in_array($newWord,$this->usedWords)){
             $stopGen = false;
-            $this->endpointWordCount++;
 
-            //reset the regeneration count
-            $this->endpointRegenerateCount = 0;
+            //check the the regeneration count isn't more or equal to the usedlist count
+            if(count($this->usedWords)>=$this->endpointRegenerateCount){
+                //update wordcount to regenerate with increased words
+                $stopGen = false;
+                $this->endpointWordCount++;
+
+                //reset the regeneration count
+                $this->endpointRegenerateCount = 0;
+            }
+        
         }
+        else{
+            $stopGen = true;
+        }
+        
 
         //return the comparison status
         return $stopGen;
     }
 
     //generate the endpoint by randomly selecting and concatenating strings of words from a list
-    private function generateShortUrl($wordCount = 1){
+    private function generateShortUrl(){
         //get total amount of words to choose from
         $totalEffWords = count($this->effWords);
         $newEndpoint = null;
 
-            for($i=1;$i<=$wordCount;$i++){
+            for($i=1;$i<=$this->endpointWordCount;$i++){
                 if(!empty($newEndpoint)){
                     $newEndpoint .= "-";
                 }
@@ -80,6 +89,13 @@ class UrlshortenerController extends Controller
 
         //increment the last used key
         $this->effWordLastUsedKey++;
+
+        if($this->effWordLastUsedKey>=$totalEffWords){
+            //reset word key
+            $this->effWordLastUsedKey = 0;
+            //increase word count
+            $this->endpointWordCount++;
+        }
 
         return $newEndpoint;
     }
@@ -111,7 +127,7 @@ class UrlshortenerController extends Controller
 
         //loop until unique endpoint is made
         while(1){
-           $newEndpoint = $this->generateShortUrl($this->endpointWordCount);
+           $newEndpoint = $this->generateShortUrl();
            $compareEndpointResult = $this->compareEndPoints($newEndpoint);
 
            //if comparison returns true, then stop the generator
