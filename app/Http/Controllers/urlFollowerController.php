@@ -15,8 +15,9 @@ class urlFollowerController extends Controller
                                 ->where('generated_url', '=', $endpoint)
                                 ->limit(1)
                                 ->get();//database call
-        $endpointInformation = json_decode($endpointInformation, true)[0];
+        $endpointInformation = json_decode($endpointInformation, true)[0];//convert from stdClass to array
 
+        //convert array to vars - just makes life easier
         $endpointUUID = $endpointInformation['uuid'];
         $endpointRedirectURL = $endpointInformation['generated_url'];
         $endpointUserURL = $endpointInformation['user_url'];
@@ -29,7 +30,11 @@ class urlFollowerController extends Controller
         $endpointUpdate = DB::table('urlshorteners')
                             ->where('uuid', $endpointUUID)
                              ->increment('counter');
+
+        //redirect
         header('Location: '.$redirectURL);
+
+        //exit
         exit;
     }
 }
