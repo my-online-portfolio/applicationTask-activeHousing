@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UrlshortenerController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,14 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $recentList = DB::table('recentten')->get();
-    return view('shortener', ['recentList'=>$recentList]);
-});
-
-Route::post('/addUrl', function(){
-    die('Hello World');
-});
+Route::get('/', [UrlshortenerController::class, 'index']);
+Route::post('/', [UrlshortenerController::class, 'create']);
 
 Route::get('/help', function () {
     return view('welcome');
