@@ -11,6 +11,8 @@ class UrlshortenerController extends Controller
     private $effWords = [];
     private $usedWords = [];
     private $useableWords = [];
+    private $endpointRegenerateCount = 0;
+    private $endpointWordCount = 1;
 
     //convert a stdClass object to array
     private function extractFromStdClass($object, $key){
@@ -40,18 +42,27 @@ class UrlshortenerController extends Controller
 
     private function compareEndPoints($newWord){
         //set the default status to return
-        $status = array('stopGen'=>false, 'wordCount'=>1);
+        $stopGen = false;//stopGen: set to false to regenerate.
 
         //refresh the used entry list
         $this->getUsedGeneratedEndpoints();
 
         //count entries of used list
-        $usedListCount = count();
-        //check if word is in used list
+        $usedListCount = count($this->usedWords);
 
+
+        //check the the regeneration count isn't more or equal to the usedlist count
+        if($usedListCount>=$this->endpointRegenerateCount){
+            //update wordcount to regenerate with increased words
+            $stopGen = false;
+            $this->endpointWordCount++;
+
+            //reset the regeneration count
+            $this->endpointRegenerateCount = 0;
+        }
 
         //return the comparison status
-        return (object) $status;
+        return $stopGen;
     }
 
     //generate the endpoint by randomly selecting and concatenating strings of words from a list
@@ -66,6 +77,9 @@ class UrlshortenerController extends Controller
                 }
                 $newEndpoint .= $this->effWords[rand(0,($totalEffWords-1))];
             }
+
+        //increase the generation count
+        $this->endpointRegenerateCount++;
 
         return $newEndpoint;
     }
