@@ -39,10 +39,12 @@ class UrlshortenerController extends Controller
     }
 
     private function compareEndPoints($newWord){
+        $status = array('stopGen'=>true, 'wordCount'=>'borrsi');
 
-        print_r($newWord);
-        
-        exit;
+
+
+        //return the comparison status
+        return (object) $status;
     }
 
     private function generateShortUrl($wordCount = 1){
@@ -90,10 +92,13 @@ class UrlshortenerController extends Controller
         while(1){
            $newEndpoint = $this->generateShortUrl($endpointWordCount);
            $compareEndpointResult = $this->compareEndPoints($newEndpoint);
+           $endpointWordCount = $compareEndpointResult->wordCount;
 
-           if($compareEndpointResult->stopgen){
+           if($compareEndpointResult->stopGen===true){
                 print_r($compareEndpointResult->wordCount);
-                exit;
+           }
+           else{
+               print_r('nope can\'t do it');
            }
 
            break;
