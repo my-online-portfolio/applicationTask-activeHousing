@@ -11,37 +11,50 @@ class UrlshortenerController extends Controller
     private $effWords = [];
     private $usedWords = [];
 
-    /**
-     * @Function: Fetches data from the recentTen view
-     */
+    //convert a stdClass object to array
+    private function extractFromStdClass($object, $key){
+        $returnArray = array();
+        foreach($object as $extract){
+            $returnArray[] = $extract->{$key};
+        }
+        return $returnArray;
+    }
+
+    //get the most recent 10 entries from the database
     private function getRecent10(){
-        $recentList = DB::table('recentten')->get();
-        return $recentList;
+        return DB::table('recentten')->get();//database call and return
     }
 
+    //get the generated endpoints from the database
     private function getUsedGeneratedEndpoints(){
-        return $this->usedWords = DB::table('urlshorteners')->select('generated_url')->get();
+        $usedWords = DB::table('urlshorteners')->select('generated_url')->get();//database call
+        return $this->usedWords = $this->extractFromStdClass($usedWords, 'words');//convert to array and return 
     }
 
+    //get the effwords list from the database
     private function getEffWords(){
-        return $this->effWords = DB::table('effwords')->select('words')->get();
+        $effWords = DB::table('effwords')->select('words')->get();//database call
+        return $this->effWords = $this->extractFromStdClass($effWords, 'words');//convert to array and return 
     }
 
     private function compareEndPoints($new = null, $used = []){
         //loop through the used words list and look for a match
-        
+
+        foreach($used as $key=>$value){
+            print_r($value->generated_url);
+            echo "\r\n";
+        }
+        exit;
     }
 
-    private function generateShortUrl(){
+    private function generateShortUrl($newWord = null){
+        //get total amount of words to choose from
+        $totalEffWords = count($this->effWords);
 
-        $usedGeneratedEndpoints = $this->getUsedGeneratedEndpoints();
-        $getEffWords = $this->getEffWords();
+        
 
-
-        print_r($getEffWords);
         die;
 
-        return "http://sillysentence/".rand(0,9999);
     }
     
     public function index()
@@ -57,7 +70,22 @@ class UrlshortenerController extends Controller
     
     public function create()
     {
+
+        
+        header('Content-Type: text/plain');
+
+        //capture user submitted url
         $userSubmittedURL = request('urlInput');
+        //get generated endpoints
+        $usedGeneratedEndpoints = $this->getUsedGeneratedEndpoints();
+        //get listed effwords
+        $getEffWords = $this->getEffWords();
+
+
+        //generate new url endpoint
+
+
+
         $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>$this->generateShortUrl($userSubmittedURL)];
 
         //render the main page with fields
