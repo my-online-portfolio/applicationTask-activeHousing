@@ -39,8 +39,15 @@ class UrlshortenerController extends Controller
     }
 
     private function compareEndPoints($newWord){
+        //set the default status to return
         $status = array('stopGen'=>false, 'wordCount'=>1);
 
+        //refresh the used entry list
+        $this->getUsedGeneratedEndpoints();
+
+        //count entries of used list
+        $usedListCount = count();
+        //check if word is in used list
 
 
         //return the comparison status
