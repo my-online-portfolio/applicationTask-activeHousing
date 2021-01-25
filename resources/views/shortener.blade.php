@@ -20,8 +20,7 @@
             <main class="h-70pc pb-6pc">
                 <section class="mr-40">
                     <div>
-                        <form>
-                            @method('PUT')
+                        <form method="POST">
                             @csrf   
                             <table>
                                 <tr>
