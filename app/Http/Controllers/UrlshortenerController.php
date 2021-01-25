@@ -13,6 +13,7 @@ class UrlshortenerController extends Controller
     private $useableWords = [];
     private $endpointRegenerateCount = 0;
     private $endpointWordCount = 1;
+    private $effWordLastUsedKey = 0;
 
     //convert a stdClass object to array
     private function extractFromStdClass($object, $key){
