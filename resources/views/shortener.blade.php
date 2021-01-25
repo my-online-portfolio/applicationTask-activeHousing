@@ -21,6 +21,8 @@
                 <section class="mr-40">
                     <div>
                         <form>
+                            @method('PUT')
+                            @csrf   
                             <table>
                                 <tr>
                                     <td>
