@@ -32,7 +32,7 @@ class UrlshortenerSeeder extends Seeder
     }
 
     private function createUrl(){
-        $url = 'http://localhost/'.$this->faker->domainWord;
+        $url = $this->faker->domainWord;
 
         return $url;
     }
