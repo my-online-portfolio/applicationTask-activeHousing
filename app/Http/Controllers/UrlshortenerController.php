@@ -35,8 +35,7 @@ class UrlshortenerController extends Controller
     public function create()
     {
         $userSubmittedURL = request('urlInput');
-        $shortGeneratedURL = $this->generateShortUrl($userSubmittedURL);
-        $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>$shortGeneratedURL];
+        $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>$this->generateShortUrl($userSubmittedURL)];
 
         //render the main page with fields
         return view('shortener', ['recentList'=>$this->getRecent10(), 'URL'=>$URL]);
