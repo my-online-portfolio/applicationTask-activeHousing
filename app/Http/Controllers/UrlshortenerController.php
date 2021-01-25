@@ -10,19 +10,11 @@ class UrlshortenerController extends Controller
 
     private $effWords = [];
     private $usedWords = [];
-    private $useableWords = [];
-    private $endpointRegenerateCount = 0;
-    private $endpointWordCount = 1;
-    private $effWordLastUsedKey = 0;
 
     private function resetDefaultValues(){
 
         $this->effWords = [];
         $this->usedWords = [];
-        $this->useableWords = [];
-        $this->endpointRegenerateCount = 0;
-        $this->endpointWordCount = 1;
-        $this->effWordLastUsedKey = 0;
 
         return true;
     }
@@ -45,10 +37,7 @@ class UrlshortenerController extends Controller
     private function getUsedGeneratedEndpoints(){
         $usedWords = DB::table('urlshorteners')->select('generated_url')->get();//database call
         $updatedArray = $this->extractFromStdClass($usedWords, 'generated_url');//convert to array and return 
-        $mergeArray = array_merge($this->usedWords, $updatedArray);
-        $mergeArray = array_unique($mergeArray);
-        $this->usedWords = $mergeArray;
-        return $this->usedWords;
+        return $this->usedWords = $updatedArray;
     }
 
     //get the effwords list from the database
@@ -56,16 +45,62 @@ class UrlshortenerController extends Controller
         $effWords = DB::table('effwords')->select('words')->get();//database call
         return $this->effWords = $this->extractFromStdClass($effWords, 'words');//convert to array and return 
     }
+    private function generateNewEndpoint(){
+        //generate endpoint
+        $newEndpoint = null;
+        $wordCount = 1;
+        $lastEffWordKey = 0;
+        $generateAttemptMax = count($this->effWords)-1;
+        $generateAttempCurrent = 0;
 
+        while(1){
+            //loop through efsWords
+            for($i=0;$i<$wordCount;$i++){
+                if($wordCount==1){
+                    $newEndpoint = $this->effWords[$lastEffWordKey];
+                }
+                else{
+                    $newEndpoint .= "-".$this->effWords[$lastEffWordKey];
+                }
+            }
+
+
+            //check endpoint
+            if(!in_array($newEndpoint, $this->usedWords)){
+                break;
+            }
+            else{
+                //increment the key until a unique one is found
+                if($lastEffWordKey>=(count($this->effWords)-1)){
+                    $lastEffWordKey=0;
+                }
+                else{
+                    $lastEffWordKey++;
+                }
+            }
+
+            if($generateAttempCurrent>=$generateAttemptMax){
+                break;
+            }
+            else{
+                $generateAttempCurrent++;
+            }
+        }
+        return $newEndpoint;
+        //die;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
 
     
-    public function index()
-    {
+    
+    public function index(){
         //render the main page with fields
         return view('shortener', ['recentList'=>$this->getRecent10()]);
     }
 
-    public function show(){}
     public function store($userSubmittedURL, $newEndpoint){
         $newInsert = [
             'user_url' => $userSubmittedURL,
@@ -73,40 +108,27 @@ class UrlshortenerController extends Controller
         ];
         return DB::table('urlshorteners')->insert($newInsert);
     }
-    public function update(){}
-    public function delete(){}
-    
-    private function generateNewEndpoint(){
-        die;
-    }
 
     public function create()
     {
+
+        $newEndpoint = null;
+
         //capture user submitted url
         $userSubmittedURL = request('urlInput');
+        for($i=0;$i<=1297;$i++){
         //get generated endpoints
         $usedGeneratedEndpoints = $this->getUsedGeneratedEndpoints();
         //get listed effwords
         $getEffWords = $this->getEffWords();
-
-
-        header('Content-Type: text/plain');
-
-        //loop
-        while(1){
-            //create url
-            $newEndpoint = $this->generateNewEndpoint();
-            //check url.
-            //if url is unique, save
-            //else loop
-        }
-        die;
+        $newEndpoint = $this->generateNewEndpoint();
 
         //reset all the default values
         $this->resetDefaultValues();
 
         //now that we have our endpoint we need to save it
-        $this->store($userSubmittedURL,$newEndpoint );
+        $this->store($userSubmittedURL,$newEndpoint);
+        }
 
         //now return the new url to the user. Save as array first
         $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>url('').'/'.$newEndpoint];
