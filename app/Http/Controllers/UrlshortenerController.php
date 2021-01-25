@@ -131,17 +131,11 @@ class UrlshortenerController extends Controller
            $compareEndpointResult = $this->compareEndPoints($newEndpoint);
 
            //if comparison returns true, then stop the generator
-           if($compareEndpointResult->stopGen===true){
-               die('stop loop');
+           if($compareEndpointResult===true){
                 break;
            }
-
-           break;
         }
-
-        print_r($newEndpoint);
-        die;
-        $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>$this->generateShortUrl($userSubmittedURL)];
+        $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>$newEndpoint];
 
         //render the main page with fields
         return view('shortener', ['recentList'=>$this->getRecent10(), 'URL'=>$URL]);
