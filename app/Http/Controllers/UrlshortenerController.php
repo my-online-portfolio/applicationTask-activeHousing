@@ -47,12 +47,8 @@ class UrlshortenerController extends Controller
         //refresh the used entry list
         $this->getUsedGeneratedEndpoints();
 
-        //count entries of used list
-        $usedListCount = count($this->usedWords);
-
-
         //check the the regeneration count isn't more or equal to the usedlist count
-        if($usedListCount>=$this->endpointRegenerateCount){
+        if(count($this->usedWords)>=$this->endpointRegenerateCount){
             //update wordcount to regenerate with increased words
             $stopGen = false;
             $this->endpointWordCount++;
