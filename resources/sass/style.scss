@@ -1,0 +1,136 @@
+$colourPalette:('primary':#2979bc,'secondary':#eeeeee,'grey':#555555);
+$fontSize:('regular':('size':'14pt','weight':'normal'),'large':('size':'18pt','weight':'normal'),'xlarge':('size':'22pt','weight':'bold'));
+$fontName: 'SourceSansPro';
+$lineHeight: calc(#{unquote(map-get(map-get($fontSize,'regular'),'size'))} + 10px);
+
+
+
+@font-face {
+    font-family: #{$fontName};
+    src: url('/fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
+    font-weight: normal;
+}
+@font-face {
+    font-family:  #{$fontName};
+    src: url('/fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf');
+    font-weight: bold;
+}
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
+@import '_mixins';
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
+html, body{
+    @include fontFamilyStandard();
+    background-color: map-get($colourPalette, 'secondary');
+    color: map-get($colourPalette, 'grey');
+}
+
+body{
+    margin: 0;
+}
+
+header,main,footer,section,.header,.main,.footer,.section{
+    margin:auto;
+}
+.header, header{ background-color: white;}
+.main, main{ background-color: map-get($colourPalette, 'secondary');}
+.section, section{
+    margin-top:40px;
+    margin-left:40px;
+}
+
+h,.h{
+    &1{
+        font-weight: unquote(map-get(map-get($fontSize,'xlarge'),'weight'));
+        font-size: unquote(map-get(map-get($fontSize,'xlarge'),'size'));
+    }
+}
+
+.logo{
+    width: 350px;
+}
+
+table, .table{
+    align: center;
+    width: 100%;
+
+    thead, .thead{}
+    tbody, .tbody{}
+    
+    th,tr,td,.th,.tr,.td{}
+
+    th{}
+    tr{}
+    td{}
+}
+
+input{
+    padding: 0;
+    &,&[type=button],&[type=submit],&[type=text],&[type=url],&[type=checkbox]{
+        margin: 0;
+        left: auto;
+        @include fontFamilyStandard();
+    }
+    &[type=button],&[type=submit],&[type=text],&[type=url]{
+        width: 90%;
+    }
+}
+
+button,.button{
+    
+    @include fontFamilyStandard();
+    background-color: #2979BC;
+    color: white;
+}
+
+a{
+    &:link,&:visited,&:hover,&:active{
+        color: map-get($colourPalette, 'primary');
+        font-weight: unquote(map-get(map-get($fontSize,'large'),'weight'));
+        font-size: unquote(map-get(map-get($fontSize,'large'),'size'));
+        text-decoration: underline;
+    }
+    &:link{}
+    &:visited{}
+    &:hover{}
+    &:active{}
+}
+
+.hide{
+    display: none !important;
+}
+
+.container{
+    .row{
+        background-color: white;
+        border-color: map-get($colourPalette,'grey');
+        border-width: 1px;
+        border-style: solid;
+
+        &:not(:last-child){
+            border-bottom-style: none;
+        }
+
+    }
+}
+
+//generate margins
+@include spacing('','px','margin',5,5,100);
+//generate padding
+@include spacing('','px','padding',5,5,100);
+@include spacing('pc','pc','padding',2,2,100);
+
+.h{
+    @include height_and_wide('vh','vh','height');
+    @include height_and_wide('pc','%','height');
+}
+.w{
+    @include height_and_wide('vw','vw','width');
+}
