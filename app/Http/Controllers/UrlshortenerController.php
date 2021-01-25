@@ -39,8 +39,6 @@ class UrlshortenerController extends Controller
     }
 
     private function compareEndPoints($newWord){
-        //renew used word list - keep it fresh as it may have changed
-        $this->getUsedGeneratedEndpoints();
 
         print_r($newWord);
         
@@ -87,8 +85,19 @@ class UrlshortenerController extends Controller
         $getEffWords = $this->getEffWords();
 
 
-        //generate new url endpoint
-        $this->generateShortUrl();
+        //loop until unique endpoint is made
+        $endpointWordCount = 1;
+        while(1){
+           $newEndpoint = $this->generateShortUrl($endpointWordCount);
+           $compareEndpointResult = $this->compareEndPoints($newEndpoint);
+
+           if($compareEndpointResult->stopgen){
+                print_r($compareEndpointResult->wordCount);
+                exit;
+           }
+
+           break;
+        }
 
 
         die;
