@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('shortener', ['recentList'=>$recentList]);
 });
 
+Route::post('/addUrl', function(){
+    die('Hello World');
+});
+
 Route::get('/help', function () {
     return view('welcome');
 });
