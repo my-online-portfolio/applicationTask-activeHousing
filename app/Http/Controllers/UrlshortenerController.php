@@ -8,6 +8,9 @@ use DB;
 class UrlshortenerController extends Controller
 {
 
+    private $effWords = [];
+    private $usedWords = [];
+
     /**
      * @Function: Fetches data from the recentTen view
      */
@@ -17,11 +20,16 @@ class UrlshortenerController extends Controller
     }
 
     private function getUsedGeneratedEndpoints(){
-        return DB::table('urlshorteners')->select('generated_url')->get();
+        return $this->usedWords = DB::table('urlshorteners')->select('generated_url')->get();
     }
 
     private function getEffWords(){
-        return DB::table('effwords')->select('words')->get();
+        return $this->effWords = DB::table('effwords')->select('words')->get();
+    }
+
+    private function compareEndPoints($new = null, $used = []){
+        //loop through the used words list and look for a match
+        
     }
 
     private function generateShortUrl(){
@@ -30,7 +38,7 @@ class UrlshortenerController extends Controller
         $getEffWords = $this->getEffWords();
 
 
-        print_r($getEffWordsx);
+        print_r($getEffWords);
         die;
 
         return "http://sillysentence/".rand(0,9999);
