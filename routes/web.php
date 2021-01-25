@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('shortener');
+    $recentList = DB::table('recentten')->get();
+    return view('shortener', ['recentList'=>$recentList]);
 });
 
 Route::get('/help', function () {

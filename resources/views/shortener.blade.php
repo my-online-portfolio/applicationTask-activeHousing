@@ -43,13 +43,14 @@
                 <section class="mr-95">
                     <h1>Recent Links</h1>
                     <div class="container">
-                        @for ($i = 1; $i <= 5; $i++)
+                        @foreach($recentList as $key => $data)
                             <div class="row px-10">
-                                <div class="link-short"><a href="http://localhost/ROW{{ $i }}">http://localhost/ROW{{ $i }}</a></div>
-                                <div class="mt-10">{{$i}} week(s) apache_get_modules</div>
-                                <div class="link-long mb-10">http://localhost/somemassivelonglinkthatneededshorteningasitwastoolong{{$i}}</div>
+                                <div class="link-short"><a href="{{asset('')}}{{$data->generated_url}}">{{asset('')}}{{$data->generated_url}}</a></div>
+                                <div class="mt-10">{{$data->date_added}}</div>
+                                <div class="link-long mb-10">{{$data->user_url}}<span class="sub">{{$data->description}}</span></div>
+                                <input type=hidden value="" id="UUID">
                             </div>
-                        @endfor
+                        @endforeach
                     </div>
                 </section>
             </main>
