@@ -15,7 +15,14 @@ class urlFollowerController extends Controller
                                 ->where('generated_url', '=', $endpoint)
                                 ->limit(1)
                                 ->get();//database call
-        $endpointInformation = json_decode($endpointInformation, true)[0];//convert from stdClass to array
+        $endpointInformation = json_decode($endpointInformation, true);//convert from stdClass to array
+
+        //check that we have data to process. If empty, return 404.
+        if(empty($endpointInformation)){
+            abort(404);
+        }
+
+        $endpointInformation = $endpointInformation[0];
 
         //convert array to vars - just makes life easier
         $endpointUUID = $endpointInformation['uuid'];
@@ -32,9 +39,8 @@ class urlFollowerController extends Controller
                              ->increment('counter');
 
         //redirect
-        header('Location: '.$redirectURL);
-
-        //exit
-        exit;
+        
+        //render the main page with fields
+        return view('redirect', ['redirectURL'=>$endpointUserURL]);
     }
 }
