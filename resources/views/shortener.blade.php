@@ -25,13 +25,13 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input type="url" id="urlInput" name="urlInput" value="" placeholder="http://yoururl.here">
+                                        <input type="url" id="urlInput" name="urlInput" value="{{$URL['userURL'] ?? null}}" placeholder="http://yoururl.here">
                                     </td>
                                     <td>
-                                        <input type="url" id="urlInput" name="urlInput" value="" placeholder="http://yoururl.here">
+                                        <input type="url" id="urlOutput" name="urlOutput" value="{{$URL['shortGeneratedURL'] ?? null}}" placeholder="http://yoururl.here" readonly>
                                     </td>
                                     <td>
-                                        <input type="checkbox"><label class="ml-10">Private?</label>
+                                        <input type="checkbox" id="privateCheck" name="privateCheck" value="1"><label class="ml-10">Private?</label>
                                     </td>
                                     <td>
                                         <button type="submit" class="pt-2 pr-25 pb-2 pl-25">Shorten</button>
