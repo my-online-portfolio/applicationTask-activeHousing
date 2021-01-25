@@ -15,6 +15,18 @@ class UrlshortenerController extends Controller
     private $endpointWordCount = 1;
     private $effWordLastUsedKey = 0;
 
+    private function resetDefaultValues(){
+
+        $this->effWords = [];
+        $this->usedWords = [];
+        $this->useableWords = [];
+        $this->endpointRegenerateCount = 0;
+        $this->endpointWordCount = 1;
+        $this->effWordLastUsedKey = 0;
+
+        return true;
+    }
+
     //convert a stdClass object to array
     private function extractFromStdClass($object, $key){
         $returnArray = array();
@@ -131,6 +143,9 @@ class UrlshortenerController extends Controller
                 break;
            }
         }
+
+        //reset all the default values
+        $this->resetDefaultValues();
 
         //now that we have our endpoint we need to save it
         $newInsert = [
