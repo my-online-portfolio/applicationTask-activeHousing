@@ -15,8 +15,9 @@ use App\Http\Controllers\UrlshortenerController;
 |
 */
 
-Route::get('/', [UrlshortenerController::class, 'index']);
-Route::post('/', [UrlshortenerController::class, 'create']);
+Route::get('/', [UrlshortenerController::class, 'index']);//return main page
+Route::post('/', [UrlshortenerController::class, 'create']);//create the new url
+
 
 Route::get('/help', function () {
     return view('welcome');
