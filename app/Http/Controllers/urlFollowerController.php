@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use DB;
+
+class urlFollowerController extends Controller
+{
+    //
+
+    private $redirectUsingHeader = true;
+
+    public function redirect($endpoint){
+        //lookup the DB and get the information for this endpoint
+        $endpointInformation = DB::table('urlshorteners')
+                                ->where('generated_url', '=', $endpoint)
+                                ->limit(1)
+                                ->get();//database call
+        $endpointInformation = json_decode($endpointInformation, true);//convert from stdClass to array
+
+        //check that we have data to process. If empty, return 404.
+        if(empty($endpointInformation)){
+            abort(404);
+        }
+
+        $endpointInformation = $endpointInformation[0];
+
+        //convert array to vars - just makes life easier
+        $endpointUUID = $endpointInformation['uuid'];
+        $endpointRedirectURL = $endpointInformation['generated_url'];
+        $endpointUserURL = $endpointInformation['user_url'];
+        $endpointDescription = $endpointInformation['description'];
+        $endpointCounter = $endpointInformation['counter'];
+        $endpointDateAdded = $endpointInformation['date_added'];
+        $endpointDateUpdated = $endpointInformation['date_updated'];
+
+        //update the counter before issuing a redirect
+        $endpointUpdate = DB::table('urlshorteners')
+                            ->where('uuid', $endpointUUID)
+                             ->increment('counter');
+
+        //redirect
+        if($this->redirectUsingHeader){
+            //redirect using header
+            header('location: '.$endpointUserURL);
+            exit;
+        }
+        else{
+            //render the main page with fields
+            return view('redirect', ['redirectURL'=>$endpointUserURL]);
+        }
+    }
+}
