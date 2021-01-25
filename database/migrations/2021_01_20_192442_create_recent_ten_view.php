@@ -16,7 +16,7 @@ class CreateRecentTenView extends Migration
         
         //delete the view
         DB::statement('DROP VIEW IF EXISTS recentten');
-        DB::statement('CREATE VIEW recentten AS SELECT user_url, generated_url, description, counter FROM urlshorteners ORDER BY date_added DESC LIMIT 10');
+        DB::statement('CREATE VIEW recentten AS SELECT * FROM urlshorteners ORDER BY date_added DESC LIMIT 10');
     }
 
     /**
