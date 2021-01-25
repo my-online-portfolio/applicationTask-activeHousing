@@ -9,6 +9,8 @@ class urlFollowerController extends Controller
 {
     //
 
+    private $redirectUsingHeader = true;
+
     public function redirect($endpoint){
         //lookup the DB and get the information for this endpoint
         $endpointInformation = DB::table('urlshorteners')
@@ -39,8 +41,14 @@ class urlFollowerController extends Controller
                              ->increment('counter');
 
         //redirect
-        
-        //render the main page with fields
-        return view('redirect', ['redirectURL'=>$endpointUserURL]);
+        if($this->redirectUsingHeader){
+            //redirect using header
+            header('location: '.$endpointUserURL);
+            exit;
+        }
+        else{
+            //render the main page with fields
+            return view('redirect', ['redirectURL'=>$endpointUserURL]);
+        }
     }
 }
