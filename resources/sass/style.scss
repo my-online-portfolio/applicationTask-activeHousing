@@ -123,6 +123,9 @@ a{
 
 .link{
     &-long{
+
+        overflow-wrap: break-word;
+
         span{
             display: table;
             font-style: italic;
