@@ -9,6 +9,7 @@ class UrlshortenerController extends Controller
 {
     public function create()
     {
+        header('Content-Type: text/plain');
         $userSubmittedURL = request('urlInput');//capture user submitted url
         $this->getEffWords();//get EffWords
         $this->getUsedWords();//get UsedWords
@@ -17,7 +18,7 @@ class UrlshortenerController extends Controller
 
 
 
-        
+
         //remove when finished writing
         die('EOF');        
     }
@@ -36,9 +37,19 @@ class UrlshortenerController extends Controller
     private $effWords;
     private $usedWords;
 
-    private function getEffWords(){}
+    private function getEffWords(){
+        $this->effWords = $this->stdClassToArray(DB::table('effwords')->get());
+        return;
+    }
     private function getUsedWords(){}
     private function makeEndpoint(){}
     private function checkEndpoint(){}
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    private function stdClassToArray($stdClass){
+        return json_decode($stdClass, true);
+    }
 
 }
