@@ -38,10 +38,7 @@ class UrlshortenerController extends Controller
     private $usedWords;
 
     private function getEffWords(){
-        $effWords = [];
-        foreach($this->stdClassToArray(DB::table('effwords')->select('words')->get()) as $nextWord){
-            $effWords[] = $nextWord['words'];
-        }
+        $effWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('effwords')->select('words')->get()),'words');
         $this->effWords = $effWords;
         return;
     }
@@ -57,6 +54,13 @@ class UrlshortenerController extends Controller
 
     private function stdClassToArray($stdClass){
         return json_decode($stdClass, true);
+    }
+    private function multiDimensionalArrayToSingleArray($multiDimensionalArray = [], $key = 0){
+        $newArray = [];
+        foreach($multiDimensionalArray as $nextRow){
+            $newArray[] = $nextRow[$key];
+        }
+        return $newArray;
     }
 
 }
