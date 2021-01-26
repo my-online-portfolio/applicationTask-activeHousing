@@ -43,7 +43,7 @@ class UrlshortenerController extends Controller
         return;
     }
     private function getUsedWords(){
-        $this->usedWords = $this->stdClassToArray(DB::table('urlshorteners')->select('generated_url')->get());
+        $this->usedWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('urlshorteners')->select('generated_url')->get()),'generated_url');
         return;
     }
     private function makeEndpoint(){}
