@@ -14,7 +14,7 @@ class UrlshortenerController extends Controller
 
 
         header('Content-Type: text/plain');
-        $userURL = 'http://www.google.com';//request('urlInput');//capture user submitted url
+        $userURL = request('urlInput');//capture user submitted url
         //$description = request('urlInput');//capture user submitted url
 
         $this->getEffWords();//get EffWords
@@ -23,13 +23,10 @@ class UrlshortenerController extends Controller
 
         //store the new endpoint
         $this->store($userURL, $generatedURL, $description);
-
-        //return the output to the page view
-
-
-
-        //remove when finished writing
-        die("\r\n\r\n\r\n\r\nEOF");        
+        $URL = ['userURL'=>$userURL,'shortGeneratedURL'=>$generatedURL, 'description'=>$description];
+        
+        //render the main page with fields
+        return view('shortener', ['recentList'=>$this->getRecent10(), 'URL'=>$URL]);
     }
 
     /**
@@ -217,6 +214,11 @@ class UrlshortenerController extends Controller
         }
 
         return $status;
+    }
+    
+    //get the most recent 10 entries from the database
+    private function getRecent10(){
+        return DB::table('recentten')->get();//database call and return
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
