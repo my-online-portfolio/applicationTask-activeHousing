@@ -17,6 +17,9 @@ use App\Http\Controllers\urlFollowerController;
 |
 */
 
+/**
+ * Used custom controllers to render the output as needed
+ */
 Route::get('/', [indexPageController::class, 'index']);//return main page
 Route::post('/', [UrlshortenerController::class, 'create']);//create the new url
 
