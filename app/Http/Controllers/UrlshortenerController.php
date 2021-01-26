@@ -9,9 +9,15 @@ class UrlshortenerController extends Controller
 {
     public function create()
     {
-        //capture user submitted url
-        $userSubmittedURL = request('urlInput');
+        $userSubmittedURL = request('urlInput');//capture user submitted url
+        $this->getEffWords();//get EffWords
+        $this->getUsedWords();//get UsedWords
 
+
+
+
+
+        
         //remove when finished writing
         die('EOF');        
     }
