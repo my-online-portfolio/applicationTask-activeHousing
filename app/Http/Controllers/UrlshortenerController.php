@@ -24,6 +24,7 @@ class UrlshortenerController extends Controller
         //store the new endpoint
         $this->store($userURL, $generatedURL, $description);
 
+        //return the output to the page view
 
 
 
@@ -42,17 +43,8 @@ class UrlshortenerController extends Controller
             'description'=> $description,
         ]);
 
-        print_r($returnedInfo);
-        die;
+        return $returnedInfo;
     }
-
-
-    //fetch effwords
-    //fetch usedwords
-    //generate endpoint
-    //check new endpoint
-    //--IF endpoint is already used. Regenerate
-    //--ELSE save the endpoint and return
 
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
