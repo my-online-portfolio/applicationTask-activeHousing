@@ -11,6 +11,8 @@ class UrlshortenerController extends Controller
     {
         //capture user submitted url
         $userSubmittedURL = request('urlInput');
-        
+
+        //remove when finished writing
+        die('EOF');        
     }
 }
