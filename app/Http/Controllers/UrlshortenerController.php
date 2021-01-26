@@ -38,7 +38,11 @@ class UrlshortenerController extends Controller
     private $usedWords;
 
     private function getEffWords(){
-        $this->effWords = $this->stdClassToArray(DB::table('effwords')->get());
+        $effWords = [];
+        foreach($this->stdClassToArray(DB::table('effwords')->select('words')->get()) as $nextWord){
+            $effWords[] = $nextWord['words'];
+        }
+        $this->effWords = $effWords;
         return;
     }
     private function getUsedWords(){
