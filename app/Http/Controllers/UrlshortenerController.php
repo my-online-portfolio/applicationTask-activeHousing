@@ -7,21 +7,40 @@ use DB;
 
 class UrlshortenerController extends Controller
 {
+
     public function create()
     {
+        $userURL = $generatedURL = $description = null;
+
+
         header('Content-Type: text/plain');
-        $userSubmittedURL = request('urlInput');//capture user submitted url
+        $userURL = 'http://www.google.com';//request('urlInput');//capture user submitted url
+        //$description = request('urlInput');//capture user submitted url
+
         $this->getEffWords();//get EffWords
         $this->getUsedWords();//get UsedWords
-        $this->makeEndpoint();//make the new endpoint
+        $generatedURL = $this->makeEndpoint();//make the new endpoint
 
-
+        //store the new endpoint
+        $this->store($userURL, $generatedURL, $description);
 
 
 
 
         //remove when finished writing
         die("\r\n\r\n\r\n\r\nEOF");        
+    }
+
+    private function store($userURL, $generatedURL, $description = null){
+        
+        $returnedInfo = DB::table('urlshorteners')->insert([
+            'user_url' => $userURL,
+            'generated_url' => $generatedURL,
+            'description'=> $description,
+        ]);
+
+        print_r($returnedInfo);
+        die;
     }
 
 
@@ -162,8 +181,7 @@ class UrlshortenerController extends Controller
         }
 
 
-        print_r($wordToUse);
-        die;
+        return $wordToUse;
 
     }
     private function checkEndpoint($chosenWord,$endpointsToCheck){
