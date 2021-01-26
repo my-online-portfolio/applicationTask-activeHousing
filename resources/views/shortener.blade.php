@@ -25,10 +25,10 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input type="url" id="urlInput" name="urlInput" value="{{$URL['userURL'] ?? null}}" placeholder="http://yoururl.here">
+                                        <input type="url" id="urlInput" name="urlInput" value="{{$URL['userURL'] ?? null}}" placeholder="Long URL (required)" required>
                                     </td>
                                     <td>
-                                        <input type="url" id="urlOutput" name="urlOutput" value="{{$URL['shortGeneratedURL'] ?? null}}" placeholder="http://yoururl.here" readonly>
+                                        <input type="text" id="urlDescription" name="urlDescription" value="{{$URL['description'] ?? null}}" placeholder="Short URL Keyword (optional)">
                                     </td>
                                     <td>
                                         <input type="checkbox" id="privateCheck" name="privateCheck" value="1"><label class="ml-10">Private?</label>
@@ -46,9 +46,9 @@
                     <div class="container">
                         @foreach($recentList as $key => $data)
                             <div class="row px-10">
-                                <div class="link-short"><a href="{{asset('')}}{{$data->generated_url}}" target="_blank">{{asset('')}}{{$data->generated_url}}</a></div>
-                                <div class="mt-10">{{$data->date_added}}</div>
-                                <div class="link-long mb-10">{{$data->user_url}}<span class="sub">{{$data->description}}</span></div>
+                                <div class="link-short"><a href="{{asset('')}}{{$data['generated_url']}}" target="_blank">{{asset('')}}{{$data['generated_url']}}</a></div>
+                                <div class="mt-10">{{$data['date_added']}}</div>
+                                <div class="link-long mb-10">{{$data['user_url']}}<span class="sub">{{$data['description']}}</span></div>
                                 <input type=hidden value="" id="UUID">
                             </div>
                         @endforeach
