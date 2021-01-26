@@ -46,7 +46,7 @@
                     <div class="container">
                         @foreach($recentList as $key => $data)
                             <div class="row px-10">
-                                <div class="link-short"><a href="{{asset('')}}{{$data->generated_url}}">{{asset('')}}{{$data->generated_url}}</a></div>
+                                <div class="link-short"><a href="{{asset('')}}{{$data->generated_url}}" target="_blank">{{asset('')}}{{$data->generated_url}}</a></div>
                                 <div class="mt-10">{{$data->date_added}}</div>
                                 <div class="link-long mb-10">{{$data->user_url}}<span class="sub">{{$data->description}}</span></div>
                                 <input type=hidden value="" id="UUID">

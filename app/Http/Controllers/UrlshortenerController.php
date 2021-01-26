@@ -8,132 +8,246 @@ use DB;
 class UrlshortenerController extends Controller
 {
 
-    private $effWords = [];
-    private $usedWords = [];
+    public function create()
+    {
+        $userURL = $generatedURL = $description = null;
 
-    private function resetDefaultValues(){
 
-        $this->effWords = [];
-        $this->usedWords = [];
+        header('Content-Type: text/plain');
+        $userURL = request('urlInput');//capture user submitted url
+        //$description = request('urlInput');//capture user submitted url
 
-        return true;
+        $this->getEffWords();//get EffWords
+        $this->getUsedWords();//get UsedWords
+        $generatedURL = $this->makeEndpoint();//make the new endpoint
+
+        //store the new endpoint
+        $this->store($userURL, $generatedURL, $description);
+        $URL = ['userURL'=>$userURL,'shortGeneratedURL'=>$generatedURL, 'description'=>$description];
+        
+        //render the main page with fields
+        return view('shortener', ['recentList'=>$this->getRecent10(), 'URL'=>$URL]);
     }
 
-    //convert a stdClass object to array
-    private function extractFromStdClass($object, $key){
-        $returnArray = array();
-        foreach($object as $extract){
-            $returnArray[] = $extract->{$key};
+    /**
+     * Function to store the newly created endpoint
+     */
+    private function store($userURL, $generatedURL, $description = null){
+        
+        $returnedInfo = DB::table('urlshorteners')->insert([
+            'user_url' => $userURL,
+            'generated_url' => $generatedURL,
+            'description'=> $description,
+        ]);
+
+        return $returnedInfo;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    private $effWords;
+    private $usedWords;
+    private $totalWordsToInclude = 1;
+
+    private function getEffWords(){
+        $this->effWords = $this->multiDimensionalArrayToSingleArray(
+            $this->stdClassToArray(
+                DB::table('effwords')
+                ->select('words')
+                ->inRandomOrder()
+                ->limit(5)
+                ->get()
+            ),
+            'words'
+        );
+        return;
+    }
+    private function getUsedWords(){
+        $this->usedWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('urlshorteners')->select('generated_url')->get()),'generated_url');
+        return;
+    }
+    private function makeEndpoint($totalWordsToInclude = 1){
+        if($this->totalWordsToInclude!=$totalWordsToInclude){
+            $this->totalWordsToInclude = $totalWordsToInclude;
         }
-        return $returnArray;
-    }
+        
+        $effWords = $this->effWords;
+        $wordsList = array();
+        $firsWord = $effWords[0];
 
+        /**
+         * Function to remove the first element of the array and place
+         * it on the end of the array.
+         * Will return an array of arrays until the sequence ends up with 
+         * the first element back in it's position
+         */
+        function shiftAround($array = array()){
+            //reindex array
+            $array = array_values($array);
+            $firstArrayElement = $array[0];//capture first element
+            $returnArray = array();//array to return later
+
+            while(1){
+                $removeElement = $array[0];//capture the first element
+                array_shift($array);//remove the first element
+                $array[] = $removeElement;//append the element
+
+                //add the array to the returnArray
+                $returnArray[] = $array;
+
+                if($array[0]==$firstArrayElement){
+                    break;
+                }
+            }
+
+            return $returnArray;
+        }
+
+        /**
+         * Function to generate an array of words that can be used
+         */
+        function wordsByCount($count = 1, $wordsToPickFrom = array()){
+            
+            $returnList = array();
+            $wordSeperator = '-';
+
+            if($count==1){ return $wordsToPickFrom; }//if word count is 1 return wordlist
+            else{
+
+                //loop through each word
+                foreach($wordsToPickFrom as $nextWord){
+                    //loop through iterations on self
+                    $self = array();
+                    for($a=0;$a<$count;$a++){
+                        $self[] = $nextWord;//add self to array
+                        $returnList[] = implode('-',$self);//concatenate array elements and insert into array
+                    }
+                }
+
+                //loop through each entry of the array
+                foreach($wordsToPickFrom as $nextWord){
+                    //add each word to use sequentially
+                    $sequentially = $wordsToPickFrom;//make copy of wordlist
+                    //remove self from array
+                    $sequentially = array_flip($sequentially);//swap the keys and values
+                    unset($sequentially[$nextWord]);//remove from array using the nextword
+                    $sequentially = array_flip($sequentially);//swap the keys and values
+                    $theOrder = shiftAround($sequentially);//get an array of arrays with changing sequence
+
+                    //loop around each theOrder to get order of words to use
+                    foreach($theOrder as $nextList){
+
+                        $nextListToAdd = array();
+                        $previousWord = $nextWord;
+                        foreach($nextList as $nextWord2){
+                            $previousWord = $previousWord.$wordSeperator.$nextWord2;
+                            $nextListToAdd[] = $previousWord;
+                        }
+                        $returnList = array_merge($returnList, $nextListToAdd);
+                    }
+
+                }
+
+
+
+            }
+
+            //trim the array to entries containing hyphens
+            if($count>1){
+                $newReturnList = array();
+                foreach($returnList as $nextCheck){
+                    if((substr_count($nextCheck,$wordSeperator)+1)==$count){
+                        $newReturnList[] = $nextCheck;
+                    }
+                }
+                $returnList = $newReturnList;
+            }
+
+            sort($returnList);//sort the array in alphabetical order
+
+            return $returnList;//return the array
+        }
+
+
+        while(1){
+            $wordsList = wordsByCount($this->totalWordsToInclude,$effWords);
+            $wordToUse = $wordsList[mt_rand(0,(count($wordsList)-1))];
+            $wordCheck = $this->checkEndpoint($wordToUse, $wordsList);
+
+            //update the lists
+            $this->getEffWords();//get EffWords
+            $this->getUsedWords();//get UsedWords
+            
+            if($wordCheck->state === true){
+                break;
+            }
+        }
+
+
+        return $wordToUse;
+
+    }
+    private function checkEndpoint($chosenWord,$endpointsToCheck){
+        $status = (object) array('state'=>false);
+        $usedWords = $this->usedWords;
+
+        //compare arrays and return differences
+        $wordsArray = array_diff($endpointsToCheck, $usedWords);
+        if(count($wordsArray)==0){
+            //we have no unique words.
+            //return and increase the wordcount
+            $this->totalWordsToInclude++;
+            $status->state = false;
+        }
+        else{
+
+            //make sure the chosen word isn't in the list
+            if(in_array($chosenWord, $wordsArray)){
+                $status->state = true;
+            }
+            else{
+                $this->totalWordsToInclude++;
+                $status->state = false;
+            }
+
+        }
+
+        return $status;
+    }
+    
     //get the most recent 10 entries from the database
     private function getRecent10(){
         return DB::table('recentten')->get();//database call and return
     }
 
-    //get the generated endpoints from the database
-    private function getUsedGeneratedEndpoints(){
-        $usedWords = DB::table('urlshorteners')->select('generated_url')->get();//database call
-        $updatedArray = $this->extractFromStdClass($usedWords, 'generated_url');//convert to array and return 
-        return $this->usedWords = $updatedArray;
+    ////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+    private function randomEffWords(){
+
     }
-
-    //get the effwords list from the database
-    private function getEffWords(){
-        $effWords = DB::table('effwords')->select('words')->get();//database call
-        return $this->effWords = $this->extractFromStdClass($effWords, 'words');//convert to array and return 
-    }
-    private function generateNewEndpoint(){
-        //generate endpoint
-        $newEndpoint = null;
-        $wordCount = 1;
-        $lastEffWordKey = 0;
-        $generateAttemptMax = count($this->effWords)-1;
-        $generateAttempCurrent = 0;
-
-        while(1){
-            //loop through efsWords
-            for($i=0;$i<$wordCount;$i++){
-                if($wordCount==1){
-                    $newEndpoint = $this->effWords[$lastEffWordKey];
-                }
-                else{
-                    $newEndpoint .= "-".$this->effWords[$lastEffWordKey];
-                }
-            }
-
-
-            //check endpoint
-            if(!in_array($newEndpoint, $this->usedWords)){
-                break;
-            }
-            else{
-                //increment the key until a unique one is found
-                if($lastEffWordKey>=(count($this->effWords)-1)){
-                    $lastEffWordKey=0;
-                }
-                else{
-                    $lastEffWordKey++;
-                }
-            }
-
-            if($generateAttempCurrent>=$generateAttemptMax){
-                break;
-            }
-            else{
-                $generateAttempCurrent++;
-            }
+    private function iterateWords($word = null, $wordList = []){
+        $returnWordList = [];
+        
+        if(!empty($word)){ $word .= '-'; }
+        
+        for($i=0;$i<=(count($wordList)-1);$i++){
+        
+            $returnWordList[] = $word.$wordList[$i];
+        
         }
-        return $newEndpoint;
-        //die;
+        
+        return $returnWordList;
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////
-
-    
-    
-    public function index(){
-        //render the main page with fields
-        return view('shortener', ['recentList'=>$this->getRecent10()]);
+    private function stdClassToArray($stdClass){
+        return json_decode($stdClass, true);
     }
-
-    public function store($userSubmittedURL, $newEndpoint){
-        $newInsert = [
-            'user_url' => $userSubmittedURL,
-            'generated_url' => $newEndpoint
-        ];
-        return DB::table('urlshorteners')->insert($newInsert);
-    }
-
-    public function create()
-    {
-
-        $newEndpoint = null;
-
-        //capture user submitted url
-        $userSubmittedURL = request('urlInput');
-        for($i=0;$i<=1297;$i++){
-        //get generated endpoints
-        $usedGeneratedEndpoints = $this->getUsedGeneratedEndpoints();
-        //get listed effwords
-        $getEffWords = $this->getEffWords();
-        $newEndpoint = $this->generateNewEndpoint();
-
-        //reset all the default values
-        $this->resetDefaultValues();
-
-        //now that we have our endpoint we need to save it
-        $this->store($userSubmittedURL,$newEndpoint);
+    private function multiDimensionalArrayToSingleArray($multiDimensionalArray = [], $key = 0){
+        $newArray = [];
+        foreach($multiDimensionalArray as $nextRow){
+            $newArray[] = $nextRow[$key];
         }
-
-        //now return the new url to the user. Save as array first
-        $URL = ['userURL'=>$userSubmittedURL, 'shortGeneratedURL'=>url('').'/'.$newEndpoint];
-
-        //render the main page with fields
-        return view('shortener', ['recentList'=>$this->getRecent10(), 'URL'=>$URL]);
+        return $newArray;
     }
+
 }
