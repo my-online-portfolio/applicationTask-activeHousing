@@ -16,6 +16,8 @@ use App\Http\Controllers\UrlshortenerController;
 */
 
 Route::get('/', [UrlshortenerController::class, 'index']);//return main page
+
+Route::get('/insert', [UrlshortenerController::class, 'create']);//create the new url
 Route::post('/', [UrlshortenerController::class, 'create']);//create the new url
 
 
