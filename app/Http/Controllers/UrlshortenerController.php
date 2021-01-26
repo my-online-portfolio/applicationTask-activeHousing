@@ -15,7 +15,7 @@ class UrlshortenerController extends Controller
 
         header('Content-Type: text/plain');
         $userURL = request('urlInput');//capture user submitted url
-        //$description = request('urlInput');//capture user submitted url
+        $description = request('urlDescription');//capture user submitted url
 
         $this->getEffWords();//get EffWords
         $this->getUsedWords();//get UsedWords
