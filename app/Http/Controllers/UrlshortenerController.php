@@ -37,6 +37,7 @@ class UrlshortenerController extends Controller
 
     private $effWords = ['urgent','khaki','upwind','augmented','dugout'];
     private $usedWords;
+    private $totalWordsToInclude = 1;
 
     private function getEffWords(){
         $effWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('10effs')->select('words')->get()),'words');
@@ -47,10 +48,12 @@ class UrlshortenerController extends Controller
         $this->usedWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('urlshorteners')->select('generated_url')->get()),'generated_url');
         return;
     }
-    private function makeEndpoint($effWordChoice = 0,$currentEffWord = null,$totalWordsToInclude = 1){
+    private function makeEndpoint($totalWordsToInclude = 1){
+        if($this->totalWordsToInclude!=$totalWordsToInclude){
+            $this->totalWordsToInclude = $totalWordsToInclude;
+        }
         
-        $effWordsOriginal = array('urgent','khaki','upwind','augmented','dugout');
-        $effWords = $effWordsOriginal;
+        $effWords = array('urgent','khaki','upwind','augmented','dugout');
         $wordsList = array();
         $firsWord = $effWords[0];
 
@@ -144,26 +147,52 @@ class UrlshortenerController extends Controller
 
             sort($returnList);//sort the array in alphabetical order
 
-            print_r($returnList);
-            exit;
             return $returnList;//return the array
         }
 
-        $wordsList = wordsByCount(2,$effWordsOriginal);
-       
 
-        /**
-         * Now choose a generated word for submission to the check system
-         */
-
-        $wordToUse = $wordsList[mt_rand(0,(count($wordsList)-1))];
+        while(1){
+            $wordsList = wordsByCount($this->totalWordsToInclude,$effWords);
+            $wordToUse = $wordsList[mt_rand(0,(count($wordsList)-1))];
+            $wordCheck = $this->checkEndpoint($wordToUse, $wordsList);
+            
+            if($wordCheck->state === true){
+                break;
+            }
+        }
 
 
         print_r($wordToUse);
         die;
 
     }
-    private function checkEndpoint(){}
+    private function checkEndpoint($chosenWord,$endpointsToCheck){
+        $status = (object) array('state'=>false);
+        $usedWords = $this->usedWords;
+
+        //compare arrays and return differences
+        $wordsArray = array_diff($endpointsToCheck, $usedWords);
+        if(count($wordsArray)==0){
+            //we have no unique words.
+            //return and increase the wordcount
+            $this->totalWordsToInclude++;
+            $status->state = false;
+        }
+        else{
+
+            //make sure the chosen word isn't in the list
+            if(in_array($chosenWord, $wordsArray)){
+                $status->state = true;
+            }
+            else{
+                $this->totalWordsToInclude++;
+                $status->state = false;
+            }
+
+        }
+
+        return $status;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
@@ -181,8 +210,6 @@ class UrlshortenerController extends Controller
         
         return $returnWordList;
     }
-    
-
     private function stdClassToArray($stdClass){
         return json_decode($stdClass, true);
     }
