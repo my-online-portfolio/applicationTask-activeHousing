@@ -38,7 +38,7 @@ class UrlshortenerController extends Controller
     private $usedWords;
 
     private function getEffWords(){
-        $effWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('effwords')->select('words')->get()),'words');
+        $effWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('10effs')->select('words')->get()),'words');
         $this->effWords = $effWords;
         return;
     }
@@ -46,7 +46,15 @@ class UrlshortenerController extends Controller
         $this->usedWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('urlshorteners')->select('generated_url')->get()),'generated_url');
         return;
     }
-    private function makeEndpoint(){}
+    private function makeEndpoint($effWordChoice = 0,$currentEffWord = null,$totalWordsToInclude = 1){
+        /*$effWordChoice = 0;//the key of the effWord
+        $currentEffWord = null;//the currently selected word
+        $totalWordsToInclude = 1;//the number of words to use*/
+
+        //choose the word from the effWords List
+
+
+    }
     private function checkEndpoint(){}
 
     ////////////////////////////////////////////////////////////////////////////////////
