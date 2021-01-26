@@ -94,6 +94,9 @@ a:link, a:visited, a:hover, a:active {
   border-bottom-style: none;
 }
 
+.link-long {
+  overflow-wrap: break-word;
+}
 .link-long span {
   display: table;
   font-style: italic;
