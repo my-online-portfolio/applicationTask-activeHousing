@@ -25,10 +25,10 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input type="url" id="urlInput" name="urlInput" value="{{$URL['userURL'] ?? null}}" placeholder="http://yoururl.here">
+                                        <input type="url" id="urlInput" name="urlInput" value="{{$URL['userURL'] ?? null}}" placeholder="Long URL (required)" required>
                                     </td>
                                     <td>
-                                        <input type="url" id="urlDescription" name="urlDescription" value="{{$URL['description'] ?? null}}" placeholder="Description">
+                                        <input type="url" id="urlDescription" name="urlDescription" value="{{$URL['description'] ?? null}}" placeholder="Short URL Keyword (optional)">
                                     </td>
                                     <td>
                                         <input type="checkbox" id="privateCheck" name="privateCheck" value="1"><label class="ml-10">Private?</label>
