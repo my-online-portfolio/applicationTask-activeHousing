@@ -131,15 +131,35 @@ class UrlshortenerController extends Controller
 
             }
 
+            //trim the array to entries containing hyphens
+            if($count>1){
+                $newReturnList = array();
+                foreach($returnList as $nextCheck){
+                    if((substr_count($nextCheck,$wordSeperator)+1)==$count){
+                        $newReturnList[] = $nextCheck;
+                    }
+                }
+                $returnList = $newReturnList;
+            }
+
             sort($returnList);//sort the array in alphabetical order
+
+            print_r($returnList);
+            exit;
             return $returnList;//return the array
         }
 
-        $wordsList = wordsByCount(6,$effWordsOriginal);
+        $wordsList = wordsByCount(2,$effWordsOriginal);
        
 
-        
-        print_r($wordsList);
+        /**
+         * Now choose a generated word for submission to the check system
+         */
+
+        $wordToUse = $wordsList[mt_rand(0,(count($wordsList)-1))];
+
+
+        print_r($wordToUse);
         die;
 
     }
