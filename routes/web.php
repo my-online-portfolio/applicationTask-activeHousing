@@ -17,13 +17,11 @@ use App\Http\Controllers\urlFollowerController;
 |
 */
 
-Route::get('/insert', [UrlshortenerController::class, 'create']);//create the new url
+/**
+ * Used custom controllers to render the output as needed
+ */
 Route::get('/', [indexPageController::class, 'index']);//return main page
 Route::post('/', [UrlshortenerController::class, 'create']);//create the new url
 
 //Custom url follower
 Route::get('{endpoint}',[urlFollowerController::class, 'redirect']);
-
-Route::get('/help', function () {
-    return view('welcome');
-});
