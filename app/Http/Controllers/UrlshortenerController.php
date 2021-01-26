@@ -31,6 +31,9 @@ class UrlshortenerController extends Controller
         die("\r\n\r\n\r\n\r\nEOF");        
     }
 
+    /**
+     * Function to store the newly created endpoint
+     */
     private function store($userURL, $generatedURL, $description = null){
         
         $returnedInfo = DB::table('urlshorteners')->insert([
@@ -54,13 +57,21 @@ class UrlshortenerController extends Controller
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
 
-    private $effWords = ['urgent','khaki','upwind','augmented','dugout'];
+    private $effWords;
     private $usedWords;
     private $totalWordsToInclude = 1;
 
     private function getEffWords(){
-        $effWords = $this->multiDimensionalArrayToSingleArray($this->stdClassToArray(DB::table('10effs')->select('words')->get()),'words');
-        //$this->effWords = $effWords;
+        $this->effWords = $this->multiDimensionalArrayToSingleArray(
+            $this->stdClassToArray(
+                DB::table('effwords')
+                ->select('words')
+                ->inRandomOrder()
+                ->limit(5)
+                ->get()
+            ),
+            'words'
+        );
         return;
     }
     private function getUsedWords(){
@@ -72,7 +83,7 @@ class UrlshortenerController extends Controller
             $this->totalWordsToInclude = $totalWordsToInclude;
         }
         
-        $effWords = array('urgent','khaki','upwind','augmented','dugout');
+        $effWords = $this->effWords;
         $wordsList = array();
         $firsWord = $effWords[0];
 
@@ -174,6 +185,10 @@ class UrlshortenerController extends Controller
             $wordsList = wordsByCount($this->totalWordsToInclude,$effWords);
             $wordToUse = $wordsList[mt_rand(0,(count($wordsList)-1))];
             $wordCheck = $this->checkEndpoint($wordToUse, $wordsList);
+
+            //update the lists
+            $this->getEffWords();//get EffWords
+            $this->getUsedWords();//get UsedWords
             
             if($wordCheck->state === true){
                 break;
@@ -214,8 +229,10 @@ class UrlshortenerController extends Controller
 
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
+    private function randomEffWords(){
 
-    function iterateWords($word = null, $wordList = []){
+    }
+    private function iterateWords($word = null, $wordList = []){
         $returnWordList = [];
         
         if(!empty($word)){ $word .= '-'; }
