@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\indexPageController;
 use App\Http\Controllers\UrlshortenerController;
 use App\Http\Controllers\urlFollowerController;
 
@@ -16,7 +17,7 @@ use App\Http\Controllers\urlFollowerController;
 |
 */
 
-Route::get('/', [UrlshortenerController::class, 'index']);//return main page
+Route::get('/', [indexPageController::class, 'index']);//return main page
 Route::post('/', [UrlshortenerController::class, 'create']);//create the new url
 
 //Custom url follower
