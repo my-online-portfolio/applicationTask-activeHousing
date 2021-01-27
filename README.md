@@ -21,8 +21,11 @@ Tips for setting up
 
 The last command should run the Laravel Application on the localhost. The terminal window will display the address.
 
+## Specifications
+All specification files can be found in the main repo directory under info/specification
 
-[========]
+
+------------
 
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
