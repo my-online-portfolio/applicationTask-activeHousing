@@ -1,3 +1,25 @@
+# Application Task | Active Housing/Hallnet Ltd
+[![The repo for the project](https://repository-images.githubusercontent.com/332255245/7f7c9300-609b-11eb-9429-5c2f4cf389d5 "The repo for the project")](https://github.com/themadlabs/applicationTask-activeHousing "The repo for the project")
+
+#### This project is written in PHP/Laravel v8
+
+Tips for setting up 
+- Check the requirements for your system at https://laravel.com/docs/8.x
+- Make a clone of the repo (extract if downloading as a zip)
+- Setup your database along with usernames and passwords.
+- Edit/create your .env file using the example version provided in the repo
+- Open a terminal window. CD into your copy of the repo
+- Run the following commands
+- - composer install
+- - php artisan key:generate
+- - php artisan cache:clear
+- - php artisan storage:link
+- - php artisan migrate
+
+
+[========]
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
