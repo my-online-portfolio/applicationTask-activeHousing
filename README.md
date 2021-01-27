@@ -15,6 +15,11 @@ Tips for setting up
 - - php artisan cache:clear
 - - php artisan storage:link
 - - php artisan migrate
+- - *(Optional - Will pre-seed the shortened URLS)* - artisan db:seed --class=UrlshortenerSeeder 
+- At this stage if there are no errors run the following
+- - php artisan serve
+
+The last command should run the Laravel Application on the localhost. The terminal window will display the address.
 
 
 [========]
