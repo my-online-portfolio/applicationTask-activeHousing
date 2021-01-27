@@ -10,8 +10,23 @@ use Faker\Factory as Faker;
 class UrlshortenerSeeder extends Seeder
 {
 
-    private $creationInsert = [];
     private $faker;
+    private $creationInsert = [];
+    private $entries = [
+        ['https://github.com','saxophone','NULL',0],
+        ['https://www.youtube.com/watch?v=sPHs-c8CvrU','atlas','Who doesn\'t love Thomas?',0],
+        ['https://celebrationspress.com/wp-content/uploads/2018/01/010218Goofy.jpg','yogurt','Silly picture',1],
+        ['https://osmaps.ordnancesurvey.co.uk/','balancing',NULL,0],
+        ['http://www.jayjames.co.uk','detergent',NULL,1],
+        ['https://www.google.com','urban','Search Engine',0],
+        ['https://www.gocompare.com/ps/homepage/cd/?media=A147135&gclsrc=aw.ds&&gclid=Cj0KCQiAmL-ABhDFARIsAKywVafEdhhrGyrNAr2Ci-VTgIWVioIyLXxv8P9uIm_MfnAxfFbLKSt6nBUaAluWEALw_wcB','cakewalk','That annoying little...',0],
+        ['https://miro.com/signup/','guitar','Another test URL',0],
+        ['https://www.dogstrust.org.uk/','shirt','A worthwhile cause',0],
+        ['https://www.google.com/maps/place/Hereford+Cathedral/@52.0542588,-2.7165856,182m/data=!3m1!1e3!4m5!3m4!1s0x48704a3873b932e3:0xade705243b3ed7fb!8m2!3d52.0543046!4d-2.7158659','john','An old building',0],
+        ['https://github.com','fryingpan','This is an entry',1],
+        ['https://github.com','blurred','This is the third description',0]
+
+    ];
 
     private function createModifyDate($creationDate = null){
 
@@ -31,46 +46,22 @@ class UrlshortenerSeeder extends Seeder
         return $creationDate;
     }
 
-    private function createUrl(){
-        $url = $this->faker->domainWord;
+    private function createEntry($entryData){
+        $userURL = $entryData[0];
+        $generatedURL = $entryData[1];
+        $description = $entryData[2];
+        $counter = $entryData[3];
+        $dateAdded = $this->faker->dateTimeBetween($startDate = '-10 years', $endDate = 'now', $timezone = null);
 
-        return $url;
-    }
-
-    private function createEntry(){
-        
-        $this->faker = Faker::create();
-        $creationDate = $this->faker->dateTimeBetween($startDate = '-10 years', $endDate = 'now', $timezone = null);
-        $creationDate = $creationDate->format('Y-m-d H:i:s');
-        $modifyDate = $creationDate;
-
-        $newInsert = [
-            'user_url' => $this->faker->url,
-            'generated_url' => $this->preventDuplicateUrl(),
-            'description' => $this->faker->text($maxNbChars = 140) ,
-            'date_added' => $creationDate,
-           'date_updated' => $this->createModifyDate($creationDate),
+        $entry = [
+            'user_url' => $userURL,
+            'generated_url' => $generatedURL,
+            'description' => $description,
+            'counter' => $counter,
+            'date_added' => $dateAdded->format('Y-m-d H:i:s')
         ];
-        
-        $this->creationInsert[] = $newInsert;
 
-    }
-
-    private function preventDuplicateUrl(){
-        $url = $this->createUrl();
-
-        if(!empty($this->creationInsert)){
-            for($i=0;$i<count($this->creationInsert);$i++){
-               if($this->creationInsert[$i]['generated_url']==$url){
-                   print_r('Duplicate found');
-                   echo "\r\n";
-                    $url = $this->createUrl();
-                    $i=0;
-               }
-            }
-        }
-        
-        return $url;
+        return $entry;
     }
 
     /**
@@ -80,14 +71,14 @@ class UrlshortenerSeeder extends Seeder
      */
     public function run()
     {
-        //truncate the table before seeding
-        DB::statement('TRUNCATE urlshorteners');
-
-        //create 30 random entries
-    	for($i=1;$i<=30;$i++) {
-            $this->createEntry();
-        }
         
+        DB::statement('TRUNCATE urlshorteners');
+        $this->faker = Faker::create();
+
+        foreach($this->entries as $nextEntry){
+            $this->creationInsert[] = $this->createEntry($nextEntry);
+        }
+
         DB::table('urlshorteners')->insert($this->creationInsert);
     }
 }
